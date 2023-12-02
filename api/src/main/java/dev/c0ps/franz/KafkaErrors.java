@@ -15,9 +15,9 @@
  */
 package dev.c0ps.franz;
 
-import java.util.function.Consumer;
-
 import dev.c0ps.io.TRef;
+
+import java.util.function.Consumer;
 
 public interface KafkaErrors {
 
@@ -28,6 +28,8 @@ public interface KafkaErrors {
     <T> void publish(T obj, String topic, Lane lane);
 
     <T> void publish(String key, T obj, String topic, Lane lane);
+
+    void pollAllLanes();
 
     void pollAllErrors();
 

@@ -29,6 +29,8 @@ import java.util.function.BiFunction;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
+import com.google.inject.Inject;
+import com.google.inject.name.Named;
 import org.apache.kafka.clients.consumer.CommitFailedException;
 import org.apache.kafka.clients.consumer.KafkaConsumer;
 import org.apache.kafka.clients.producer.KafkaProducer;
@@ -39,8 +41,6 @@ import org.slf4j.LoggerFactory;
 
 import dev.c0ps.io.JsonUtils;
 import dev.c0ps.io.TRef;
-import jakarta.inject.Inject;
-import jakarta.inject.Named;
 
 public class KafkaImpl implements Kafka, KafkaErrors {
 
@@ -223,6 +223,21 @@ public class KafkaImpl implements Kafka, KafkaErrors {
     }
 
     @Override
+    public synchronized void pollAllLanes() {
+        boolean continuePolling;
+
+        do {
+            continuePolling = false;
+
+            for (Lane lane : Lane.values()) {
+                LOG.debug("Polling " + lane.name().toLowerCase() + "...");
+                var conn = conns.get(lane);
+                continuePolling |= process(conn, lane, POLL_TIMEOUT_PRIO);
+            }
+        } while (continuePolling);
+    }
+
+    @Override
     public synchronized void pollAllErrors() {
         LOG.debug("Polling errors ...");
         var c = conns.get(ERROR);
@@ -231,8 +246,8 @@ public class KafkaImpl implements Kafka, KafkaErrors {
             // wait for assignment
             c.poll(POLL_TIMEOUT_ZEROISH);
         }
-
-        c.seekToBeginning(c.assignment());
+//        Disable seeking to beginning for now
+//        c.seekToBeginning(c.assignment());
         while (process(c, Lane.ERROR, POLL_TIMEOUT_PRIO)) {
             // repeat
         }
