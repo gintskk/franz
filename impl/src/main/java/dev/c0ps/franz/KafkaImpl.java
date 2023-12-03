@@ -246,8 +246,7 @@ public class KafkaImpl implements Kafka, KafkaErrors {
             // wait for assignment
             c.poll(POLL_TIMEOUT_ZEROISH);
         }
-//        Disable seeking to beginning for now
-//        c.seekToBeginning(c.assignment());
+        c.seekToBeginning(c.assignment());
         while (process(c, Lane.ERROR, POLL_TIMEOUT_PRIO)) {
             // repeat
         }
