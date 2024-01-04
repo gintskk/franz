@@ -14,7 +14,7 @@
 
     <properties>
         <!-- automatically set through: mvn versions:set -DupdateBuildOutputTimestampPolicy=always -DnewVersion=... -->
-        <project.build.outputTimestamp>2023-11-12T01:52:37Z</project.build.outputTimestamp>
+        <project.build.outputTimestamp>2023-12-14T02:57:25Z</project.build.outputTimestamp>
     </properties>
 
     <modules>
