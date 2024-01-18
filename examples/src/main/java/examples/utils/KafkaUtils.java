@@ -28,7 +28,7 @@ import examples.basicpubsub.data.SomeInputDataJson;
 public class KafkaUtils {
 
     // configuration is assuming that the server auto-creates unknown topics
-    private static final String KAFKA_URL = "localhost:19092";
+    private static final String KAFKA_URL = "kafka:9092";
     private static final String KAFKA_GROUP_ID = "kafka-example";
 
     public static KafkaImpl getKafkaInstance() {
